@@ -2,55 +2,111 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rikeoka Digital Card</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RIKEOKA | Digital Card</title>
+
+  <!-- OGP（任意） -->
+  <meta property="og:title" content="理系のオカルト研 | RIKEOKA" />
+  <meta property="og:description" content="幽霊にガチで挑む日本唯一の心霊チャンネル" />
+  <meta property="og:type" content="website" />
+
   <style>
-    body {
-      background: radial-gradient(circle at center, #0a0a0a, #000);
-      color: #00ffff;
-      font-family: "Helvetica Neue", sans-serif;
-      text-align: center;
-      padding: 40px;
+    :root{
+      --panel-bg: rgba(0,0,0,.55);
+      --panel-border: rgba(255,255,255,.2);
+      --text-main: #fff;
+      --text-sub: rgba(255,255,255,.8);
+      --btn-bg: #fff;
+      --btn-fg: #111;
+      --btn-bg-hover:#e9e9e9;
     }
-    h1 {
-      font-size: 2em;
-      margin-top: 40px;
+    /* 背景：写真＋ほんのりビネット */
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Helvetica Neue", Arial, system-ui, -apple-system, "Noto Sans JP", sans-serif;
+      color: var(--text-main);
+      background: #000 url("images/ghost-bg.jpg") center/cover no-repeat fixed;
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
     }
-    img {
-      width: 160px;
-      margin: 20px auto;
-      display: block;
-      filter: drop-shadow(0 0 10px #00ffff);
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        radial-gradient(1200px 600px at 50% 10%, rgba(0,0,0,.25), rgba(0,0,0,.75));
+      pointer-events:none;
     }
-    .button {
-      display: inline-block;
-      background: #00ffff;
-      color: #000;
-      padding: 12px 24px;
-      margin: 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: 0.3s;
+
+    /* 中央パネル（例画像の“枠”イメージ） */
+    .panel{
+      width:min(92vw, 720px);
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: clamp(20px, 6vw, 40px);
+      backdrop-filter: blur(2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.45);
+      text-align:center;
     }
-    .button:hover {
-      background: #00cccc;
-      transform: scale(1.05);
+
+    .logo{
+      width:84px; height:auto; margin:0 auto 14px;
+      display:block; opacity:.95;
     }
-    footer {
-      color: #999;
-      font-size: 0.8em;
-      margin-top: 40px;
+
+    h1{
+      margin: 4px 0 10px;
+      font-size: clamp(26px, 4.5vw, 44px);
+      letter-spacing: .02em;
+      font-weight: 800;
+    }
+
+    .tagline{
+      margin: 0 0 22px;
+      font-size: clamp(14px, 2.6vw, 18px);
+      color: var(--text-sub);
+      letter-spacing: .05em;
+    }
+
+    .btns{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+    .btn{
+      display:inline-block;
+      padding: 12px 20px;
+      border-radius: 10px;
+      background: var(--btn-bg);
+      color: var(--btn-fg);
+      text-decoration:none;
+      font-weight: 700;
+      border: 1px solid rgba(0,0,0,.08);
+      transition: transform .08s ease, background .15s ease, opacity .15s ease;
+      min-width: 150px;
+    }
+    .btn:hover{ background: var(--btn-bg-hover); transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0); opacity:.9; }
+
+    footer{
+      margin-top: 18px;
+      font-size: 12px;
+      color: rgba(255,255,255,.6);
     }
   </style>
 </head>
 <body>
-  <img class="logo" src="images/rikeokaIcon.png" alt="Rikeoka Logo">
-  <h1>理系のオカルト研</h1>
-  <p>科学で怪異を覗く。<br>— Rikeoka Digital Card —</p>
+  <main class="panel" role="main">
+    <!-- ロゴ不要ならこの <img> を削除 -->
+    <img class="logo" src="images/rikeokaIcon.png" alt="RIKEOKA">
 
-  <a class="button" href="https://x.com/_rikeoka_" target="_blank">X（Twitter）</a>
-  <a class="button" href="https://www.youtube.com/@rikeoka" target="_blank">YouTube</a>
+    <h1>理系のオカルト研</h1>
+    <p class="tagline">幽霊にガチで挑む日本唯一の心霊チャンネル</p>
 
-  <footer>© Rikeoka 2025</footer>
+    <div class="btns">
+      <a class="btn" href="https://x.com/_rikeoka_" target="_blank" rel="noopener">X（Twitter）</a>
+      <a class="btn" href="https://www.youtube.com/@rikeoka" target="_blank" rel="noopener">YouTube</a>
+    </div>
+
+    <footer>© RIKEOKA 2025</footer>
+  </main>
 </body>
 </html>
