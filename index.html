@@ -6,63 +6,69 @@
 <title>Rikeoka Digital Card</title>
 <meta name="theme-color" content="#0b0d10" />
 <link rel="preload" as="image" href="images/rikeokaIcon.png" />
+<link rel="preload" as="image" href="images/Leather_1.jpg" />
 <style>
   :root{
-    --bg:#0b0d10;          /* 画面背景 */
-    --ink:#e8edf1;         /* 文字色 */
-    --muted:#a6b2bb;
-    --edge:rgba(0,255,255,.18); /* カード縁のグロー */
+    --ink:#eaf0f4;
+    --muted:#aeb7be;
     --accent:#0ef;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0; color:var(--ink); background:var(--bg);
+    margin:0; color:var(--ink);
     font-family:"Noto Sans JP","Helvetica Neue",Arial,system-ui,sans-serif;
     -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-    display:grid; place-items:center;
-    padding:18px;           /* 端末に依らず“はみ出し”防止 */
-    overflow:auto;          /* 小画面ではスクロール可 */
+    display:grid; place-items:center; padding:18px;
+    background: #0b0d10 url("images/Leather_1.jpg") center/cover no-repeat fixed;
+    position:relative; overflow:auto;
+  }
+  /* レザー背景のビネット＆ガラス感の薄い霧 */
+  body::before{
+    content:""; position:fixed; inset:0;
+    background:
+      radial-gradient(120% 100% at 50% 0%, rgba(0,0,0,.25), transparent 45%),
+      radial-gradient(120% 100% at 50% 100%, rgba(0,0,0,.45), rgba(0,0,0,.85));
+    pointer-events:none;
   }
 
-  /* --------- 単一カード（縦） --------- */
+  /* ====== 縦カード（高級メタル） ====== */
   .card{
     width:min(92vw,420px);
-    aspect-ratio: 9 / 14.5;             /* はみ出さない比率 */
-    border-radius:22px;
-    position:relative;
-    padding:22px 20px 18px;
-    overflow:hidden;
-    /* クレカ風：ブラッシュド金属 + ライン + ブルーグロー */
+    aspect-ratio:9 / 14.5;
+    border-radius:22px; position:relative; overflow:hidden;
+    padding:22px 20px 20px;
+    /* ブラッシュド金属の質感：超細ストライプ＋鏡面ハイライト */
     background:
-      /* 細ストライプ */
-      repeating-linear-gradient( 115deg,
-        rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px,
-        transparent 1px, transparent 7px),
-      /* 斜めのブラッシュド */
-      linear-gradient( -20deg, rgba(255,255,255,.06), rgba(0,0,0,.35) 55%, rgba(0,0,0,.55)),
-      radial-gradient(120% 90% at 0% 0%, rgba(0,240,255,.22), rgba(0,0,0,0) 60%),
-      radial-gradient(120% 90% at 100% 100%, rgba(0,90,255,.18), rgba(0,0,0,0) 60%),
-      #0f1418;
-    border:1px solid var(--edge);
+      /* 微細ノイズ */
+      linear-gradient(0deg, rgba(255,255,255,.04), rgba(255,255,255,.02)),
+      /* ヘアライン（極細） */
+      repeating-linear-gradient( 100deg,
+        rgba(255,255,255,.045) 0px, rgba(255,255,255,.045) .6px,
+        rgba(0,0,0,.08) .6px, rgba(0,0,0,.08) 2.4px),
+      /* 上下の鏡面ハイライト */
+      linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.05) 18%, rgba(0,0,0,.35) 55%, rgba(0,0,0,.65)),
+      /* 深いチタン調ベース */
+      linear-gradient(135deg, #1b252c, #0f1418 55%, #0b0f13);
+    border:1px solid rgba(255,255,255,.08);
     box-shadow:
-      0 12px 40px rgba(0,0,0,.55),
-      inset 0 0 60px rgba(0,240,255,.08),
-      inset 0 0 0 1px rgba(255,255,255,.04);
+      0 14px 42px rgba(0,0,0,.55),
+      inset 0 0 0 1px rgba(255,255,255,.05),
+      inset 0 0 60px rgba(0,240,255,.06);
     animation:pop .5s cubic-bezier(.25,.8,.2,1) both;
   }
-  @keyframes pop{from{transform:translateY(12px) scale(.985); opacity:0} to{transform:none; opacity:1}}
+  @keyframes pop{from{transform:translateY(12px) scale(.985); opacity:0}to{transform:none;opacity:1}}
 
-  /* 上部センターにロゴをどーん */
+  /* 上部ロゴをさらに大きく中央配置 */
   .logo{
     position:absolute; left:50%; top:18px; transform:translateX(-50%);
-    width:min(34%,120px); height:auto; object-fit:contain;
-    filter:drop-shadow(0 0 18px rgba(0,240,255,.35));
+    width:min(46%,160px); height:auto; object-fit:contain;
+    filter:drop-shadow(0 0 22px rgba(0,240,255,.35));
   }
 
-  /* 右上ホログラム風（CSSだけで演出） */
+  /* ホログラム風ワンポイント（右上） */
   .holo{
-    position:absolute; top:18px; right:18px; width:44px; height:32px; border-radius:8px;
+    position:absolute; top:18px; right:18px; width:48px; height:34px; border-radius:9px;
     background:
       radial-gradient(circle at 20% 20%, #fff, #bfe3ff 40%, #6ad 65%, #58ffa6 85%),
       linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,255,255,.1));
@@ -70,39 +76,41 @@
     box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);
   }
 
-  /* テキストブロック（カード中央〜下） */
+  /* コンテンツ配置 */
   .content{
-    position:absolute; inset:94px 18px 18px 18px;
-    display:flex; flex-direction:column; justify-content:flex-end; gap:16px;
-  }
-  .title{
-    margin:0; font-weight:800; letter-spacing:.18em; font-size:18px;
-  }
-  .tag{
-    margin:0; color:var(--muted); line-height:1.7; font-size:14px;
+    position:absolute; inset:108px 18px 18px 18px;
+    display:flex; flex-direction:column; gap:16px;
   }
 
-  .btns{display:flex; gap:10px; flex-wrap:wrap}
+  /* 大きな「RIKEOKA」 */
+  .brand{
+    margin:0; text-align:center;
+    font-weight:900; letter-spacing:.28em;
+    font-size:clamp(24px, 6.2vw, 34px);
+  }
+
+  /* エレガントなサブコピー */
+  .tag{
+    margin:2px auto 0; text-align:center; max-width:32ch;
+    color:var(--muted); font-size:15px; line-height:1.8;
+  }
+
+  .btns{display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:6px}
   .btn{
     appearance:none; border:0; cursor:pointer; text-decoration:none;
     background:var(--accent); color:#022029; font-weight:800;
-    padding:12px 16px; border-radius:12px; letter-spacing:.02em;
-    box-shadow:0 10px 30px rgba(0,240,255,.25);
-    transition:.15s transform ease, .15s box-shadow ease, .15s filter ease;
+    padding:12px 18px; border-radius:12px; letter-spacing:.02em;
+    box-shadow:0 12px 36px rgba(0,240,255,.28);
+    transition:.15s transform ease,.15s box-shadow ease;
   }
-  .btn:hover{transform:translateY(-1px); box-shadow:0 14px 36px rgba(0,240,255,.34)}
+  .btn:hover{transform:translateY(-1px); box-shadow:0 16px 44px rgba(0,240,255,.35)}
   .btn:active{transform:none}
 
-  /* 署名風のコピー */
-  .sig{
-    margin:6px 2px 0; font-size:12px; color:#c9d4db; opacity:.85;
-  }
+  .sig{margin:10px 0 0; text-align:center; font-size:12px; color:#cbd5db; opacity:.85;}
 
-  /* 小画面での潰れ防止 */
-  @media (max-height:640px){
-    .card{aspect-ratio:auto; height:560px}
-  }
-  @media (prefers-reduced-motion:reduce){.card{animation:none}}
+  /* 小さな縦端末でもはみ出さない */
+  @media (max-height:640px){ .card{aspect-ratio:auto; height:560px} }
+  @media (prefers-reduced-motion:reduce){ .card{animation:none} }
 </style>
 </head>
 <body>
@@ -111,7 +119,7 @@
     <div class="holo" aria-hidden="true"></div>
 
     <div class="content">
-      <h2 class="title">RIKEOKA・CARD</h2>
+      <h1 class="brand">RIKEOKA</h1>
       <p class="tag">幽霊にガチで挑む日本唯一の心霊チャンネル</p>
 
       <div class="btns">
