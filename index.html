@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rikeoka Digital Card</title>
   <style>
+    :root{
+      --sheen-duration: 7s;    /* 反射の周期（カード & ボタン共通） */
+      --btn-dark-1:#007a7a;
+      --btn-dark-2:#002f2f;
+      --btn-dark-1h:#009999;
+      --btn-dark-2h:#003f3f;
+    }
+
+    /* 背景（レザー） */
     body {
       margin: 0;
       height: 100vh;
@@ -12,29 +21,55 @@
       justify-content: center;
       align-items: center;
       background: url('images/Leather_1.jpg') center/cover no-repeat fixed;
-      font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      font-family: "Helvetica Neue","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
     }
 
+    /* ── カード本体 ───────────────────────── */
     .card {
       width: 350px;
       height: 560px;
       border-radius: 20px;
-      overflow: hidden;
       position: relative;
-      background: url('images/metal_texture.png') center/cover no-repeat;
-      box-shadow: 0 18px 40px rgba(0,0,0,.55);
-      padding: 28px 22px 60px;
+      overflow: hidden;
       box-sizing: border-box;
+      padding: 28px 22px 60px;
       text-align: center;
+
+      /* 金属テクスチャのみ（ユーザー指定） */
+      background: url('images/metal_texture.png') center/cover no-repeat;
+
+      /* 立体感 */
+      box-shadow: 0 18px 40px rgba(0,0,0,.55);
     }
 
+    /* カードの金属反射スイープ（背景と同期） */
+    .card::before{
+      content:"";
+      position:absolute; inset:-30%;
+      background:
+        linear-gradient(115deg, transparent 0 40%,
+          rgba(255,255,255,.28) 50%,
+          transparent 60% 100%);
+      filter: blur(6px);
+      transform: rotate(-8deg);
+      animation: sweep var(--sheen-duration) linear infinite;
+      pointer-events:none;
+    }
+
+    /* ノイズをほんのり（質感） */
+    .card::after{
+      content:"";
+      position:absolute; inset:0;
+      background: url('images/noise.png');
+      opacity:.12;
+      mix-blend-mode: overlay;
+      pointer-events:none;
+    }
+
+    /* ── ロゴ/見出し/タグライン ─────────────── */
     .logo {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-      margin: 10px auto 16px;
+      width: 90px; height: 90px; border-radius: 50%;
+      object-fit: cover; display:block; margin:10px auto 16px;
       box-shadow: 0 2px 8px rgba(0,0,0,.45);
     }
 
@@ -47,52 +82,84 @@
     }
 
     .tagline {
-      width: 92%;
-      max-width: 310px;
-      display: block;
+      width: 92%; max-width: 310px; display:block;
       margin: 0 auto 30px;
-      filter: drop-shadow(0 3px 3px rgba(0,0,0,.6))
-              drop-shadow(0 10px 14px rgba(0,0,0,.4));
-      transform: scale(1.08); /* ← 少し拡大で存在感UP */
+      transform: scale(1.08);
+      filter:
+        drop-shadow(0 3px 3px rgba(0,0,0,.6))
+        drop-shadow(0 10px 14px rgba(0,0,0,.4));
     }
 
+    /* ── ボタン（ダーク寄り）＋シーン（光沢） ─────── */
     .button {
+      position: relative;
       display: block;
       width: 210px;
       margin: 12px auto;
       padding: 12px 0;
       border-radius: 20px;
-      background: linear-gradient(180deg, #007a7a, #002f2f);
-      color: #e3ffff;
+      background: linear-gradient(180deg, var(--btn-dark-1), var(--btn-dark-2));
+      color: #e6ffff;
       font-weight: 700;
       text-decoration: none;
-      box-shadow: 0 4px 14px rgba(0, 255, 255, 0.25);
-      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      box-shadow: 0 4px 14px rgba(0,255,255,0.25);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease, background .18s ease;
       filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
+      overflow: hidden; /* ← シーンを内側に切り抜き */
     }
     .button:hover {
-      transform: translateY(-1px) scale(1.04);
+      transform: translateY(-1px) scale(1.03);
+      background: linear-gradient(180deg, var(--btn-dark-1h), var(--btn-dark-2h));
       box-shadow: 0 8px 20px rgba(0,255,255,0.35);
-      background: linear-gradient(180deg, #009999, #003f3f);
     }
 
+    /* 光沢レイヤー（カードと同期アニメ） */
+    .button::after{
+      content:"";
+      position:absolute; inset:-20%;
+      background:
+        linear-gradient(120deg,
+          transparent 0 44%,
+          rgba(255,255,255,.55) 50%,
+          transparent 56% 100%);
+      mix-blend-mode: screen;
+      filter: blur(8px) saturate(1.2);
+      transform: translateX(-60%) skewX(-18deg);
+      animation: sheen var(--sheen-duration) linear infinite;
+      pointer-events:none;
+    }
+
+    /* フッター */
     footer {
-      position: absolute;
-      bottom: 14px;
-      left: 0;
-      right: 0;
-      color: #ddd;
-      font-size: .8rem;
-      text-align: center;
-      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+      position: absolute; left:0; right:0; bottom:14px;
+      color:#ddd; font-size:.8rem; text-align:center;
+      text-shadow:0 1px 3px rgba(0,0,0,.5);
     }
 
+    /* 小さめ画面での微調整 */
     @media (max-height: 640px) {
       .card { height: 520px; padding: 22px 18px 54px; }
       .logo { width: 80px; height: 80px; margin: 4px auto 12px; }
       h1 { font-size: 1.45rem; margin-bottom: 10px; }
       .tagline { margin-bottom: 22px; width: 88%; transform: scale(1.05); }
       .button { width: 200px; padding: 10px 0; }
+    }
+
+    /* 低モーション設定の端末ではアニメ無効 */
+    @media (prefers-reduced-motion: reduce) {
+      .card::before, .button::after { animation: none !important; }
+    }
+
+    /* ── Keyframes（カード/ボタン共通テンポ） ─────── */
+    @keyframes sweep {
+      0%   { transform: translateX(-40%) rotate(-8deg); opacity:.35; }
+      50%  { transform: translateX(20%)  rotate(-8deg); opacity:.18; }
+      100% { transform: translateX(80%)  rotate(-8deg); opacity:.35; }
+    }
+    @keyframes sheen {
+      0%   { transform: translateX(-65%) skewX(-18deg); opacity:.55; }
+      50%  { transform: translateX(-5%)  skewX(-18deg); opacity:.25; }
+      100% { transform: translateX(55%)  skewX(-18deg); opacity:.55; }
     }
   </style>
 </head>
