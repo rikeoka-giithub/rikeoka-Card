@@ -35,6 +35,10 @@
       text-align: center;
       background: url('images/metal_texture.png') center/cover no-repeat;
       box-shadow: 0 18px 40px rgba(0,0,0,.55);
+
+      /* ▼ ページ読み込み時の“差し出し”アニメ */
+      will-change: transform, opacity, box-shadow;
+      animation: cardDrop 700ms cubic-bezier(.22,1,.36,1) 120ms both;
     }
 
     .card::before {
@@ -145,6 +149,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .card { animation: none !important; }
       .card::before, .button::after { animation: none !important; }
     }
 
@@ -155,10 +160,18 @@
       100% { transform: translateX(80%) rotate(-8deg); opacity: .35; }
     }
 
+    /* カードの“差し出し”ドロップ＋バウンズ */
+    @keyframes cardDrop {
+      0%   { transform: translateY(-56px) scale(.985); opacity: 0; box-shadow: 0 0 0 rgba(0,0,0,0); }
+      60%  { transform: translateY(6px)  scale(1);    opacity: 1; box-shadow: 0 18px 40px rgba(0,0,0,.55); }
+      85%  { transform: translateY(-3px); }
+      100% { transform: translateY(0); }
+    }
+
     @keyframes sheen {
       0% { transform: translateX(-65%) skewX(-18deg); opacity: .45; }
-      50% { transform: translateX(-5%) skewX(-18deg); opacity: .25; }
-      100% { transform: translateX(55%) skewX(-18deg); opacity: .45; }
+      50% { transform: translateX(-5%)  skewX(-18deg); opacity: .25; }
+      100%{ transform: translateX(55%)  skewX(-18deg); opacity: .45; }
     }
   </style>
 </head>
