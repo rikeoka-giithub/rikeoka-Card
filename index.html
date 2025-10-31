@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rikeoka Digital Card</title>
   <style>
-    /* 画面全体の背景（レザー）と中央寄せ */
     body {
       margin: 0;
       height: 100vh;
@@ -16,7 +15,6 @@
       font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
     }
 
-    /* カード本体：背景は metal_texture.png だけ */
     .card {
       width: 350px;
       height: 560px;
@@ -25,13 +23,11 @@
       position: relative;
       background: url('images/metal_texture.png') center/cover no-repeat;
       box-shadow: 0 18px 40px rgba(0,0,0,.55);
-      /* レイアウトが崩れないよう内側パディングを統一 */
       padding: 28px 22px 60px;
       box-sizing: border-box;
       text-align: center;
     }
 
-    /* ロゴ（丸） */
     .logo {
       width: 90px;
       height: 90px;
@@ -39,11 +35,9 @@
       object-fit: cover;
       display: block;
       margin: 10px auto 16px;
-      /* 背景に負けない程度の控えめな縁取り */
       box-shadow: 0 2px 8px rgba(0,0,0,.45);
     }
 
-    /* タイトル */
     h1 {
       margin: 0 0 14px;
       font-size: 1.6rem;
@@ -52,59 +46,53 @@
       text-shadow: 0 2px 6px rgba(0,0,0,.7);
     }
 
-    /* キャッチ（画像差し替え） */
     .tagline {
-      width: 86%;
-      max-width: 280px;
+      width: 92%;
+      max-width: 310px;
       display: block;
-      margin: 0 auto 26px;
-      /* 背景のみのままでも読みやすくするための影（要素側のみ） */
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,.55))
-              drop-shadow(0 8px 10px rgba(0,0,0,.35));
+      margin: 0 auto 30px;
+      filter: drop-shadow(0 3px 3px rgba(0,0,0,.6))
+              drop-shadow(0 10px 14px rgba(0,0,0,.4));
+      transform: scale(1.08); /* ← 少し拡大で存在感UP */
     }
 
-    /* ボタン共通 */
     .button {
       display: block;
       width: 210px;
-      margin: 10px auto;
+      margin: 12px auto;
       padding: 12px 0;
       border-radius: 20px;
-      background: linear-gradient(180deg, #00ffff, #00b3b3);
-      color: #001618;
+      background: linear-gradient(180deg, #007a7a, #002f2f);
+      color: #e3ffff;
       font-weight: 700;
       text-decoration: none;
-      box-shadow: 0 4px 14px rgba(0,255,255,.38);
+      box-shadow: 0 4px 14px rgba(0, 255, 255, 0.25);
       transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
       filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
     }
     .button:hover {
-      transform: translateY(-1px) scale(1.03);
-      box-shadow: 0 8px 20px rgba(0,255,255,.5);
+      transform: translateY(-1px) scale(1.04);
+      box-shadow: 0 8px 20px rgba(0,255,255,0.35);
+      background: linear-gradient(180deg, #009999, #003f3f);
     }
 
-    /* フッター */
     footer {
       position: absolute;
       bottom: 14px;
       left: 0;
       right: 0;
-      color: #e6e6e6;
+      color: #ddd;
       font-size: .8rem;
       text-align: center;
       text-shadow: 0 1px 3px rgba(0,0,0,.5);
     }
 
-    /* 小さな画面でも崩れないように */
     @media (max-height: 640px) {
       .card { height: 520px; padding: 22px 18px 54px; }
       .logo { width: 80px; height: 80px; margin: 4px auto 12px; }
       h1 { font-size: 1.45rem; margin-bottom: 10px; }
-      .tagline { margin-bottom: 20px; width: 84%; }
+      .tagline { margin-bottom: 22px; width: 88%; transform: scale(1.05); }
       .button { width: 200px; padding: 10px 0; }
-    }
-    @media (max-width: 380px) {
-      .card { width: 320px; }
     }
   </style>
 </head>
@@ -112,13 +100,9 @@
   <div class="card">
     <img class="logo" src="images/rikeokaIcon.png" alt="Rikeoka Logo">
     <h1>RIKEOKA</h1>
-
-    <!-- ここを透過PNGの新しいキャッチに差し替え -->
     <img class="tagline" src="images/tagline.png" alt="幽霊にガチで挑む日本唯一の心霊ch">
-
     <a class="button" href="https://x.com/_rikeoka_" target="_blank" rel="noopener">X（Twitter）</a>
     <a class="button" href="https://www.youtube.com/@rikeoka" target="_blank" rel="noopener">YouTube</a>
-
     <footer>© Rikeoka 2025</footer>
   </div>
 </body>
