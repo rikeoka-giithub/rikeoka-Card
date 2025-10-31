@@ -6,11 +6,17 @@
   <title>Rikeoka Digital Card</title>
   <style>
     :root {
-      --sheen-duration: 7s; /* 反射周期 */
+      --sheen-duration: 7s; /* 反射周期（カード/ボタン共通） */
       --btn-top: #4d4d4d;
       --btn-bottom: #0d0d0d;
       --btn-top-hover: #666;
       --btn-bottom-hover: #1a1a1a;
+
+      /* ▼ スライド演出パラメータ（ここ触れば速さ＆距離を微調整可能） */
+      --slide-distance: -120%;   /* 初期位置（カード高さに対する割合 or px）*/
+      --slide-duration: 950ms;   /* 所要時間：しっかり見える速度 */
+      --slide-delay: 120ms;      /* 開始までの間 */
+      --slide-ease: cubic-bezier(.15,.95,.25,1); /* キレのあるease-out */
     }
 
     body {
@@ -36,11 +42,13 @@
       background: url('images/metal_texture.png') center/cover no-repeat;
       box-shadow: 0 18px 40px rgba(0,0,0,.55);
 
-      /* ▼ ページ読み込み時の“差し出し”アニメ */
-      will-change: transform, opacity, box-shadow;
-      animation: cardDrop 700ms cubic-bezier(.22,1,.36,1) 120ms both;
+      /* ▼ “シャッ”と上から下にスライド（不透明のまま） */
+      transform: translateY(var(--slide-distance));
+      animation: cardSlide var(--slide-duration) var(--slide-ease) var(--slide-delay) both;
+      will-change: transform;
     }
 
+    /* 金属反射（既存） */
     .card::before {
       content: "";
       position: absolute;
@@ -52,6 +60,7 @@
       pointer-events: none;
     }
 
+    /* ノイズ質感（既存） */
     .card::after {
       content: "";
       position: absolute;
@@ -108,13 +117,11 @@
       transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
       overflow: hidden;
     }
-
     .button:hover {
       transform: translateY(-1px) scale(1.03);
       background: linear-gradient(180deg, var(--btn-top-hover), var(--btn-bottom-hover));
       box-shadow: 0 8px 20px rgba(255,255,255,0.25);
     }
-
     .button::after {
       content: "";
       position: absolute;
@@ -146,32 +153,26 @@
       h1 { font-size: 1.45rem; margin-bottom: 10px; }
       .tagline { transform: scale(1.1); margin-bottom: 28px; }
       .button { width: 200px; padding: 10px 0; }
+      :root { --slide-distance: -110%; --slide-duration: 900ms; }
     }
 
+    /* 低モーション環境ではスライド無効 */
     @media (prefers-reduced-motion: reduce) {
-      .card { animation: none !important; }
+      .card { animation: none !important; transform: none !important; }
       .card::before, .button::after { animation: none !important; }
     }
 
-    /* ── アニメーション ─────────────── */
+    /* ── アニメーション定義 ─────────────── */
     @keyframes sweep {
       0% { transform: translateX(-40%) rotate(-8deg); opacity: .35; }
-      50% { transform: translateX(20%) rotate(-8deg); opacity: .18; }
-      100% { transform: translateX(80%) rotate(-8deg); opacity: .35; }
+      50% { transform: translateX(20%)  rotate(-8deg); opacity: .18; }
+      100%{ transform: translateX(80%)  rotate(-8deg); opacity: .35; }
     }
 
-    /* カードの“差し出し”ドロップ＋バウンズ */
-    @keyframes cardDrop {
-      0%   { transform: translateY(-56px) scale(.985); opacity: 0; box-shadow: 0 0 0 rgba(0,0,0,0); }
-      60%  { transform: translateY(6px)  scale(1);    opacity: 1; box-shadow: 0 18px 40px rgba(0,0,0,.55); }
-      85%  { transform: translateY(-3px); }
-      100% { transform: translateY(0); }
-    }
-
-    @keyframes sheen {
-      0% { transform: translateX(-65%) skewX(-18deg); opacity: .45; }
-      50% { transform: translateX(-5%)  skewX(-18deg); opacity: .25; }
-      100%{ transform: translateX(55%)  skewX(-18deg); opacity: .45; }
+    /* 不透明のまま“シャッ”と降ろすだけ（バウンズなし） */
+    @keyframes cardSlide {
+      from { transform: translateY(var(--slide-distance)); }
+      to   { transform: translateY(0); }
     }
   </style>
 </head>
