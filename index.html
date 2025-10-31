@@ -3,108 +3,108 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rikeoka Digital Card - Silver Edition</title>
+  <title>Rikeoka Digital Card</title>
   <style>
+    /* 画面全体の背景（レザー）と中央寄せ */
     body {
-      background-image: url('images/Leather_1.jpg');
-      background-size: cover;
-      background-position: center;
       margin: 0;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      font-family: "Helvetica Neue", sans-serif;
+      background: url('images/Leather_1.jpg') center/cover no-repeat fixed;
+      font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
     }
 
+    /* カード本体：背景は metal_texture.png だけ */
     .card {
       width: 350px;
       height: 560px;
       border-radius: 20px;
-      position: relative;
       overflow: hidden;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
-
-      /* 👇 ミラー調プラチナカード風 */
-      background-image:
-        radial-gradient(130% 100% at 50% -10%, rgba(255,255,255,.9), rgba(255,255,255,0) 70%),
-        linear-gradient(145deg, rgba(255,255,255,0.3), rgba(0,0,0,0.25)),
-        url("images/metal_texture.jpg");
-      background-size: cover;
-      background-position: center;
-      background-blend-mode: screen, overlay, normal;
-      filter: brightness(1.05) contrast(1.15) saturate(1.1);
+      position: relative;
+      background: url('images/metal_texture.png') center/cover no-repeat;
+      box-shadow: 0 18px 40px rgba(0,0,0,.55);
+      /* レイアウトが崩れないよう内側パディングを統一 */
+      padding: 28px 22px 60px;
+      box-sizing: border-box;
+      text-align: center;
     }
 
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 20px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(0,0,0,0.2));
-      pointer-events: none;
-    }
-
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: url("images/noise.png");
-      opacity: 0.15;
-      mix-blend-mode: overlay;
-      pointer-events: none;
-    }
-
+    /* ロゴ（丸） */
     .logo {
       width: 90px;
       height: 90px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 30px auto 20px;
       display: block;
-      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+      margin: 10px auto 16px;
+      /* 背景に負けない程度の控えめな縁取り */
+      box-shadow: 0 2px 8px rgba(0,0,0,.45);
     }
 
+    /* タイトル */
     h1 {
-      font-size: 1.6em;
-      color: #fff;
+      margin: 0 0 14px;
+      font-size: 1.6rem;
       letter-spacing: 4px;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.7);
-      margin-bottom: 10px;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,.7);
     }
 
+    /* キャッチ（画像差し替え） */
     .tagline {
-      width: 85%;
-      margin: 0 auto 25px;
+      width: 86%;
+      max-width: 280px;
       display: block;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+      margin: 0 auto 26px;
+      /* 背景のみのままでも読みやすくするための影（要素側のみ） */
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.55))
+              drop-shadow(0 8px 10px rgba(0,0,0,.35));
     }
 
+    /* ボタン共通 */
     .button {
       display: block;
-      width: 200px;
+      width: 210px;
       margin: 10px auto;
-      padding: 10px 0;
-      background: linear-gradient(180deg, #00ffff, #00b3b3);
-      color: #000;
-      font-weight: bold;
+      padding: 12px 0;
       border-radius: 20px;
+      background: linear-gradient(180deg, #00ffff, #00b3b3);
+      color: #001618;
+      font-weight: 700;
       text-decoration: none;
-      box-shadow: 0 4px 15px rgba(0,255,255,0.4);
-      transition: 0.3s;
+      box-shadow: 0 4px 14px rgba(0,255,255,.38);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
     }
-
     .button:hover {
-      transform: scale(1.05);
-      background: linear-gradient(180deg, #00d9d9, #009999);
+      transform: translateY(-1px) scale(1.03);
+      box-shadow: 0 8px 20px rgba(0,255,255,.5);
     }
 
+    /* フッター */
     footer {
-      color: #ccc;
-      font-size: 0.8em;
       position: absolute;
-      bottom: 15px;
-      width: 100%;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      color: #e6e6e6;
+      font-size: .8rem;
+      text-align: center;
+      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+    }
+
+    /* 小さな画面でも崩れないように */
+    @media (max-height: 640px) {
+      .card { height: 520px; padding: 22px 18px 54px; }
+      .logo { width: 80px; height: 80px; margin: 4px auto 12px; }
+      h1 { font-size: 1.45rem; margin-bottom: 10px; }
+      .tagline { margin-bottom: 20px; width: 84%; }
+      .button { width: 200px; padding: 10px 0; }
+    }
+    @media (max-width: 380px) {
+      .card { width: 320px; }
     }
   </style>
 </head>
@@ -112,9 +112,13 @@
   <div class="card">
     <img class="logo" src="images/rikeokaIcon.png" alt="Rikeoka Logo">
     <h1>RIKEOKA</h1>
-    <img class="tagline" src="images/tagline.png" alt="Tagline">
-    <a class="button" href="https://x.com/_rikeoka_" target="_blank">X（Twitter）</a>
-    <a class="button" href="https://www.youtube.com/@rikeoka" target="_blank">YouTube</a>
+
+    <!-- ここを透過PNGの新しいキャッチに差し替え -->
+    <img class="tagline" src="images/tagline.png" alt="幽霊にガチで挑む日本唯一の心霊ch">
+
+    <a class="button" href="https://x.com/_rikeoka_" target="_blank" rel="noopener">X（Twitter）</a>
+    <a class="button" href="https://www.youtube.com/@rikeoka" target="_blank" rel="noopener">YouTube</a>
+
     <footer>© Rikeoka 2025</footer>
   </div>
 </body>
