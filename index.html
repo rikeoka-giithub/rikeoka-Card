@@ -2,143 +2,158 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>RIKEOKA • Digital Card</title>
-<meta name="theme-color" content="#0b0b0b">
-
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RIKEOKA — Digital Card</title>
 <style>
+  /* ====== Base ====== */
   :root{
-    --c-bg: #0b0b0b;
-    --c-text: #e9eef2;
-    --c-soft: #bfc7ce;
-    --c-accent: #00f0ff;
-    --c-accent-2: #00d7d7;
+    --card-w: min(92vw, 420px);     /* 最大幅 */
+    --ratio: 54/86;                  /* 縦クレカ比率（幅/高さ） */
+    --radius: 22px;
+    --metal1:#bfc7cf; --metal2:#8e97a1; --metal3:#6f7780; /* 金属色 */
+    --glow:#00f5ff;
   }
-
+  *{box-sizing:border-box}
+  html,body{
+    height:100%; margin:0;
+    font-family: "Inter","Helvetica Neue",system-ui, -apple-system, sans-serif;
+    color:#eaeef2; background:#000;
+  }
   body{
-    margin:0;
-    min-height:100dvh;
-    color:var(--c-text);
-    background:#111 url("images/Leather_1.jpg") center/cover fixed no-repeat;
-    display:grid;
-    place-items:center;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP","Helvetica Neue",Arial,sans-serif;
+    /* 背景レザー */
+    background-image: url("images/Leather_1.jpg");
+    background-size: cover; background-position:center;
+    display:grid; place-items:center;
+    padding:24px;
   }
 
-  /* クレカ比率（横長） */
+  /* ====== Card (portrait credit card) ====== */
+  .card-wrap{
+    width:var(--card-w);
+    aspect-ratio: var(--ratio);        /* 幅:高さ = 54:86（縦カード）*/
+    /* ただし縦なので “見た目” は高さ>幅。後で縦回転はせず中身で縦設計 */
+  }
   .card{
-    width:min(88vw,420px);
-    aspect-ratio:1.585/1; /* ← クレカ比率 */
-    border-radius:20px;
-    position:relative;
-    padding:28px 28px 20px;
-    box-shadow:
-      0 24px 48px rgba(0,0,0,.55),
-      0 8px 18px rgba(0,0,0,.45),
-      inset 0 0 0 1px rgba(255,255,255,.06);
-    overflow:hidden;
-    isolation:isolate;
+    width:100%; height:100%;
+    border-radius: var(--radius);
+    position:relative; overflow:hidden;
+    /* 金属ベース */
     background:
-      /* ブラッシュドメタル */
-      repeating-linear-gradient( 100deg,
-        rgba(255,255,255,.10) 0px, rgba(255,255,255,.10) 1px,
-        rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px),
-      /* 金属グラデーション */
-      linear-gradient(160deg,#d2d7dc 0%,#aeb7bf 35%,#8e98a3 60%,#6b737d 100%);
+      /* 鏡面ハイライト */
+      radial-gradient(120% 60% at 50% -10%, #fff8 0%, #fff0 45%),
+      linear-gradient(165deg, var(--metal1), var(--metal2) 45%, var(--metal3) 100%);
+    /* ヘアライン（極薄ストライプ） */
+    mask-image:
+      repeating-linear-gradient(180deg, #000 0 1px, #000c 1px 2px);
+    box-shadow:
+      0 18px 40px rgba(0,0,0,.55),
+      inset 0 1px 0 #ffffff55,
+      inset 0 -1px 0 #00000055;
+    display:flex; flex-direction:column;
+    padding:22px 22px 26px;
+    backdrop-filter: blur(1px);
   }
-
+  /* 輪郭の外側影を強調して“カードっぽさ” */
   .card::after{
     content:"";
-    position:absolute;inset:0;
-    background:
-      radial-gradient(120% 70% at 50% -20%,rgba(255,255,255,.35),transparent 60%),
-      radial-gradient(120% 80% at 50% 120%,rgba(0,0,0,.35),transparent 55%);
-    mix-blend-mode:soft-light;
+    position:absolute; inset:-2px;
+    border-radius: calc(var(--radius) + 2px);
+    box-shadow: 0 28px 70px rgba(0,0,0,.65);
     pointer-events:none;
   }
+  /* 細い斜めヘアラインを薄く乗せる */
+  .hairline{
+    position:absolute; inset:0; pointer-events:none;
+    background:
+      repeating-linear-gradient(115deg, #ffffff0c 0 2px, #0000 2px 5px);
+    mix-blend-mode: overlay; opacity:.35;
+  }
 
+  /* ====== Chip（飾り） ====== */
   .chip{
-    position:absolute;right:18px;top:16px;
-    width:40px;height:28px;border-radius:8px;
-    background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(255,255,255,.25) 48%,rgba(0,0,0,.2) 100%);
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 2px 8px rgba(0,0,0,.35);
+    position:absolute; top:16px; right:16px;
+    width:44px; height:32px; border-radius:8px;
+    background: linear-gradient(135deg,#dfe5ea,#9aa3ad 58%,#7b838d);
+    box-shadow: inset 0 2px 2px #fff6, inset 0 -2px 3px #0004, 0 2px 8px #0006;
     opacity:.85;
   }
 
+  /* ====== Content ====== */
   .logo{
-    position:absolute;left:36px;top:26px;
-    width:70px;height:70px;object-fit:cover;
+    width:min(40%, 150px); aspect-ratio:1/1;
+    margin:6px auto 10px;
     border-radius:50%;
-    box-shadow:0 0 14px rgba(0,0,0,.4);
-    border:1px solid rgba(255,255,255,.1);
+    background:#000 center/cover no-repeat;
+    background-image:url("images/rikeokaIcon.png");
+    box-shadow: 0 8px 28px #0008, 0 0 0 6px #ffffff12, inset 0 2px 14px #0007;
   }
 
-  h1{
-    position:absolute;
-    left:50%;
-    top:30%;
-    transform:translateX(-50%);
-    margin:0;
-    font-size:clamp(26px,4.8vw,32px);
-    letter-spacing:.25em;
-    font-weight:800;
-    color:#f6f8fa;
-    text-shadow:
-      0 1px 0 rgba(255,255,255,.25),
-      0 8px 22px rgba(0,0,0,.55);
+  .brand{
+    text-align:center; letter-spacing:.28em;
+    font-weight:800; margin:2px 0 10px; line-height:1;
+    font-size: clamp(22px, 6vw, 32px);
+    text-transform: uppercase;
+    text-shadow: 0 2px 0 #0007, 0 12px 32px #000a;
   }
 
   .tagline{
-    position:absolute;
-    top:52%;
-    width:100%;
-    text-align:center;
-    color:var(--c-soft);
-    font-size:clamp(12px,3.2vw,14px);
-    line-height:1.65;
+    text-align:center; color:#e8eef6; opacity:.92;
+    font-size: clamp(12.5px, 3.2vw, 15px);
+    line-height:1.6; margin: 2px 12px 16px;
+    text-shadow: 0 1px 0 #000c;
   }
 
   .btns{
-    position:absolute;
-    bottom:26%;
-    width:100%;
-    display:flex;justify-content:center;gap:14px;
+    margin-top:auto;                /* ボタン群は下寄せ */
+    display:flex; flex-direction:column; gap:12px;
+    align-items:center; padding:0 6px 4px;
   }
-
   .btn{
-    appearance:none;border:none;cursor:pointer;text-decoration:none;
-    padding:12px 18px;
-    border-radius:999px;
-    background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.22),rgba(255,255,255,.02)),linear-gradient(180deg,var(--c-accent),var(--c-accent-2));
-    color:#001b1b;font-weight:700;letter-spacing:.02em;
-    box-shadow:0 8px 24px rgba(0,240,255,.28),inset 0 0 0 1px rgba(255,255,255,.45);
-    transition:.18s transform ease,.18s filter ease,.18s box-shadow ease;
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width: 68%; max-width: 92%;
+    padding:12px 18px; border-radius:999px;
+    color:#00252a; background:linear-gradient(180deg,#72fefe,#00eaff);
+    font-weight:800; text-decoration:none;
+    box-shadow:
+      0 10px 28px rgba(0,245,255,.28),
+      inset 0 1px 0 #fff9;
+    transition:.18s transform, .18s box-shadow;
   }
-  .btn:hover{transform:translateY(-1px);filter:saturate(110%);}
-  .btn:active{transform:translateY(0);box-shadow:0 4px 14px rgba(0,240,255,.22);}
+  .btn:hover{ transform: translateY(-1px); box-shadow:0 12px 32px rgba(0,245,255,.36), inset 0 1px 0 #fff }
+  .btn:active{ transform: translateY(0) scale(.99) }
 
   footer{
-    position:absolute;
-    bottom:10px;
-    width:100%;
-    text-align:center;
-    font-size:12px;color:#c9d1d9;opacity:.75;
-    text-shadow:0 1px 0 rgba(0,0,0,.4);
+    position:absolute; left:0; right:0; bottom:8px;
+    text-align:center; font-size:12px; color:#dbe3ea; opacity:.75;
+    text-shadow:0 1px 0 #000a;
+  }
+
+  /* ====== Very small screens ====== */
+  @media (max-width:380px){
+    :root{ --card-w: 94vw }
+    .btn{ min-width: 80% }
   }
 </style>
 </head>
-
 <body>
-  <main class="card">
-    <div class="chip" aria-hidden="true"></div>
-    <img class="logo" src="images/rikeokaIcon.png" alt="理系のオカルト研ロゴ">
-    <h1>RIKEOKA</h1>
-    <p class="tagline">幽霊にガチで挑む日本唯一の心霊チャンネル</p>
-    <div class="btns">
-      <a class="btn" href="https://x.com/_rikeoka_" target="_blank" rel="noopener">X（Twitter）</a>
-      <a class="btn" href="https://www.youtube.com/@rikeoka" target="_blank" rel="noopener">YouTube</a>
-    </div>
-    <footer>© Rikeoka 2025</footer>
-  </main>
+  <div class="card-wrap">
+    <section class="card" role="region" aria-label="Rikeoka Digital Card">
+      <span class="hairline" aria-hidden="true"></span>
+      <div class="chip" aria-hidden="true"></div>
+
+      <div class="logo" aria-label="Rikeoka logo"></div>
+
+      <h1 class="brand">RIKEOKA</h1>
+
+      <p class="tagline">幽霊にガチで挑む日本唯一の心霊チャンネル</p>
+
+      <div class="btns" role="group" aria-label="Links">
+        <a class="btn" href="https://x.com/_rikeoka_" target="_blank" rel="noopener">X（Twitter）</a>
+        <a class="btn" href="https://www.youtube.com/@rikeoka" target="_blank" rel="noopener">YouTube</a>
+      </div>
+
+      <footer>© Rikeoka 2025</footer>
+    </section>
+  </div>
 </body>
 </html>
